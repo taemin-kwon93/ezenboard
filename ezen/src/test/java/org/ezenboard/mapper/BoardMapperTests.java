@@ -61,4 +61,19 @@ public class BoardMapperTests {
 		log.info("Delete Success? : " + mapper.delete(88L));
 	}
 	
+	@Test
+	public void testUpdate() {
+		
+		BoardVO board = new BoardVO();
+		
+		board.setBno(87L);
+		board.setTitle("Test Title");
+		board.setContent("Test Content");
+		board.setWriter("Test Writer");
+		
+		int i = mapper.update(board);
+		log.info("log 남기기! " + i);
+	}
+	
+	
 }

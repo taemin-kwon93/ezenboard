@@ -37,4 +37,21 @@
 	where bno = #{bno}
 </delete>
 
+<update id="update">
+	update tbl_board 
+	set title = #{title}, 
+		content = #{content}, 
+		writer = #{writer}, 
+		updateDate = sysdate 
+	where bno = #{bno} 
+</update>
+
+<!--수정 예시, 따옴표 주의
+update tbl_board 
+set title = 'test0412', 
+	content = 'test0412', 
+	writer = 'why', 
+	updateDate = sysdate 
+where bno = 87; -->
+
 </mapper>
