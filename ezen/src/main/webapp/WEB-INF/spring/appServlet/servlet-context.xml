@@ -25,6 +25,7 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="org.ezenboard.controller" />
+
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
 	</beans:bean>

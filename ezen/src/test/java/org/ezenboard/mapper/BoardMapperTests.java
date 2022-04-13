@@ -39,4 +39,26 @@ public class BoardMapperTests {
 		log.info(board);
 	}
 	
+	@Test
+	public void testInsertSelectKey() {
+		BoardVO board = new BoardVO();
+		board.setTitle("0412title_2");
+		board.setContent("0412title_2");
+		board.setWriter("0412title_2");
+		
+		mapper.insertSelectKey(board);
+		log.info(board);
+	}
+	
+	@Test
+	public void testRead() {
+		Long bno = 1L;
+		log.info(mapper.read(bno));
+	}
+	
+	@Test
+	public void testDelete() {
+		log.info("Delete Success? : " + mapper.delete(88L));
+	}
+	
 }
