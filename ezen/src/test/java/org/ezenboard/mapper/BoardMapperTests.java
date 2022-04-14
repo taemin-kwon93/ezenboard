@@ -22,7 +22,7 @@ public class BoardMapperTests {
 	
 	@Test
 	public void getTest(){
-		mapper.selectTest().forEach(board -> log.info(board));
+		mapper.getList().forEach(board -> log.info(board));
 		/* getList() 함수의 결과 값을 하나씩 BoardVO 타입의 board 에 넘긴다! + log.info(board)를 실행한다.
 	    	getList() 결과 값이 하나도 없을 때까지 
 	    */
