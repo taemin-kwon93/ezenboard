@@ -2,17 +2,13 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
-
 <%@include file="../includes/header.jsp"%>
 
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">Tables</h1>
 	</div>
-	<!-- /.col-lg-12 -->
 </div>
-<!-- /.row -->
 
 <div class="row">
 	<div class="col-lg-12">
@@ -49,7 +45,18 @@
 						</tr>
 					</c:forEach>
 				</table>
-				
+
+				<form id='actionForm' action="/board/list" method='get'>
+					<%-- <input type='hidden' name='pageNum'
+						value='${pageMaker.cri.pageNum}'> 
+					<input type='hidden'
+						name='amount' value='${pageMaker.cri.amount}'> 
+					<input type='hidden' name='type'
+						value='<c:out value="${ pageMaker.cri.type }"/>'> 
+					<input type='hidden' name='keyword'
+						value='<c:out value="${ pageMaker.cri.keyword }"/>'> --%>
+				</form>
+
 				<!-- Modal  추가 -->
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 					aria-labelledby="myModalLabel" aria-hidden="true">
@@ -64,8 +71,6 @@
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
 									data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save
-									changes</button>
 							</div>
 						</div>
 					</div>
@@ -80,6 +85,7 @@
 		var result = '<c:out value="${result}"/>';
 		console.log("result값 -> " + result);
 		checkModal(result);
+		
 		history.replaceState({}, null, null);	
 			
 		function checkModal(result){
@@ -108,7 +114,8 @@
 		actionForm.submit();
 	});
  */
-	$(".move").on("click", function(e) {
+	//04.15 16:10
+ 	$(".move").on("click", function(e) {
 		e.preventDefault();
 		actionForm .append("<input type='hidden' name='bno' value='"
 				+ $(this).attr("href") + "'>");
