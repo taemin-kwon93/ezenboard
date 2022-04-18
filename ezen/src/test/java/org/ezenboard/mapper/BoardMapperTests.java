@@ -1,13 +1,11 @@
 package org.ezenboard.mapper;
-import java.util.List;
-
+import org.ezenboard.domain.BoardVO;
+import org.ezenboard.domain.Criteria;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.ezenboard.domain.BoardVO;
-import org.ezenboard.domain.Criteria;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -75,5 +73,13 @@ public class BoardMapperTests {
 		log.info("log 남기기! " + i);
 	}
 	
+	@Test
+	public void testPaging() {
+		Criteria cri = new Criteria();
+		cri.setPageNum(3);
+		cri.setAmount(10);
+		log.info("paging : " + mapper.getListWithPaging(cri));
+		
+	}
 	
 }
