@@ -18,13 +18,16 @@ public class BoardMapperTests {
 	@Setter(onMethod_ = @Autowired)
 	private BoardMapper mapper;
 	
+	/*
 	@Test
 	public void getTest(){
 		mapper.getList().forEach(board -> log.info(board));
-		/* getList() 함수의 결과 값을 하나씩 BoardVO 타입의 board 에 넘긴다! + log.info(board)를 실행한다.
-	    	getList() 결과 값이 하나도 없을 때까지 
-	    */
-	}
+		
+	    
+	} 
+	getList() 함수의 결과 값을 하나씩 BoardVO 타입의 board 에 넘긴다! + log.info(board)를 실행한다.
+	getList() 결과 값이 하나도 없을 때까지 
+	*/
 	
 	@Test
 	public void testInsert() {
@@ -80,6 +83,17 @@ public class BoardMapperTests {
 		cri.setAmount(10);
 		log.info("paging : " + mapper.getListWithPaging(cri));
 		
+	}
+	
+	@Test
+	public void testSearchPaging() {
+		Criteria cri = new Criteria();
+		cri.setAmount(10);
+		cri.setPageNum(1);
+		cri.setKeyword("test");
+		cri.setType("CT");
+		
+		mapper.getListWithPaging(cri);//console에서 'INFO : jdbc.resultsettable - '확인.
 	}
 	
 }

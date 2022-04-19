@@ -3,6 +3,7 @@ package org.ezenboard.service;
 import static org.junit.Assert.assertNotNull;
 
 import org.ezenboard.domain.BoardVO;
+import org.ezenboard.domain.Criteria;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,9 @@ public class BoardServiceTests {
 		assertNotNull(service);
 	}
 	
-	@Test
-	public void testT2() {
-		log.info(service.getList());
-	}
-	
+	/*
+	 * @Test public void testT2() { log.info(service.getList()); }
+	 */
 	@Test
 	public void testInsert() {
 		BoardVO board = new BoardVO();
@@ -43,10 +42,10 @@ public class BoardServiceTests {
 		log.info("등록된 글의 번호 : " + board.getBno());
 	}
 	
-	@Test
-	public void testGetList() {
-		service.getList().forEach(board -> log.info("testGetList() 로그 : " + board));;
-	}
+	/*
+	 * @Test public void testGetList() { service.getList().forEach(board ->
+	 * log.info("testGetList() 로그 : " + board));; }
+	 */
 	
 	@Test
 	public void testUpdate() {
@@ -66,4 +65,14 @@ public class BoardServiceTests {
 	public void testDelete() {
 		log.info("글 삭제 : " + service.remove(90L));
 	}
+	
+	@Test
+	public void testPaging() {
+		Criteria cri = new Criteria();
+		cri.setPageNum(3);
+		cri.setAmount(10);
+		log.info("paging : " + service.getListWithPaging(cri));
+		
+	}
+	
 }

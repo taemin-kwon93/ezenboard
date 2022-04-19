@@ -57,8 +57,8 @@
 						<input type='hidden' id='bno' name='bno' value='<c:out value="${board.bno}"/>'>
 						<input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
 						<input type='hidden' name='amount' value='<c:out value="${cri.amount}"/>'>
-						<input type='hidden' name='keyword' value='<c:out value="${cri.keyword}"/>'>
-						<input type='hidden' name='type' value='<c:out value="${cri.type}"/>'>  
+						<%-- <input type='hidden' name='keyword' value='<c:out value="${cri.keyword}"/>'>
+						<input type='hidden' name='type' value='<c:out value="${cri.type}"/>'> --%>  
 					</form>
 			</div>
 			<!--  end panel-body -->
@@ -72,7 +72,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log(${board.bno});
+	console.log("board.bno : " + ${board.bno});
+	console.log("cri.pageNum : " + ${cri.pageNum});
 	
 	<!-- 조회 페이지에서 form 처리 -->
 	var operForm = $("#operForm");

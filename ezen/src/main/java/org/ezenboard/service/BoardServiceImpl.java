@@ -3,6 +3,7 @@ package org.ezenboard.service;
 import java.util.List;
 
 import org.ezenboard.domain.BoardVO;
+import org.ezenboard.domain.Criteria;
 import org.ezenboard.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,21 @@ public class BoardServiceImpl implements BoardService {
 	@Setter(onMethod_ = @Autowired)
 	private BoardMapper mapper;
 
+	/*
+	 * @Override public List<BoardVO> getList() { log.info("getList() 실행 : " +
+	 * mapper.getList()); return mapper.getList(); }
+	 */
+	
 	@Override
-	public List<BoardVO> getList() {
-		log.info("getList() 실행 : " + mapper.getList());
-		return mapper.getList();
+	public int getTotalCount(Criteria cri) {
+		log.info("getTotalCount cri : " + cri);
+		return mapper.getTotalCount(cri);
+	}
+
+	@Override
+	public List<BoardVO> getListWithPaging(Criteria cri) {
+		log.info("getListWithPaging 실행 cri : " + cri);
+		return mapper.getListWithPaging(cri);
 	}
 
 	@Override
@@ -50,4 +62,5 @@ public class BoardServiceImpl implements BoardService {
 		
 		return mapper.update(board) == 1;
 	}
+
 }
