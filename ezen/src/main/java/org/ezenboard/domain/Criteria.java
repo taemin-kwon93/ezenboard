@@ -1,5 +1,7 @@
 package org.ezenboard.domain;
 
+import org.springframework.web.util.UriComponentsBuilder;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,5 +33,16 @@ public class Criteria {
 		 * getTypeArr -> get/set 메서드와 같이 사용.
 		 */
 	}
+	
+	public String getListLink() {
 
+		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
+				.queryParam("pageNum", this.pageNum)
+				.queryParam("amount", this.getAmount())
+				.queryParam("type", this.getType())
+				.queryParam("keyword", this.getKeyword());
+
+		return builder.toUriString();
+	}
+	
 }

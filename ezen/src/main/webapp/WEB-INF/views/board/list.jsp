@@ -132,12 +132,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		
-		/* 문제 생김 
-		console.log("result값 -> " + result);
-		console.log("pageMaker.cri.pageNum : " + ${pageMaker.cri.pageNum});
-		console.log("pageMaker.cri.keyword : " + ${pageMaker.cri.keyword}); 
-		*/
-
 		var result = '<c:out value="${result}"/>';
 	
 		checkModal(result);
