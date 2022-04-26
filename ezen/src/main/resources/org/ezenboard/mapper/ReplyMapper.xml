@@ -6,15 +6,33 @@
 
 <select id="getReplyList" resultType="org.ezenboard.domain.ReplyVO">
 <![CDATA[
-	SELECT * 
+	SELECT rno, bno, reply, replyer, replydate, updatedate 
 	FROM tbl_reply
-	ORDER BY bno ASC
+	WHERE bno = #{bno}
+	ORDER BY rno ASC
 ]]>
 </select>
 
 <insert id="insert">
-	INSERT INTO tbl_reply (rno, bno, reply, replyer, replydate)
+	INSERT INTO tbl_reply (rno, bno, reply, replyer, updatedate)
 	VALUES (seq_reply.nextval, #{bno}, #{reply}, #{replyer}, sysdate)
 </insert>
+
+<select id="read" resultType="org.ezenboard.domain.ReplyVO">
+	SELECT * 
+	FROM tbl_reply 
+	WHERE rno = #{rno}
+</select>
+
+<delete id="delete">
+	DELETE 
+	FROM tbl_reply 
+	WHERE rno = #{rno}
+</delete>
+
+<update id="update">
+	UPDATE tbl_reply SET reply = #{reply}, updatedate = sysdate 
+	WHERE rno = #{rno}
+</update>
 
 </mapper>

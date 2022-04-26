@@ -1,6 +1,8 @@
 package org.ezenboard.mapper;
 import java.util.Date;
+import java.util.List;
 
+import org.ezenboard.domain.Criteria;
 import org.ezenboard.domain.ReplyVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +20,12 @@ public class ReplyMapperTests {
 
 	@Setter(onMethod_ = @Autowired)
 	private ReplyMapper mapper;
-
+	
 	@Test
-	public void test1() {
-		log.info(mapper.getReplyList());
+	public void getReplyListTest() {
+		Criteria cri = new Criteria();
+		
+		log.info("로그 test1 : " + mapper.getReplyList(cri, 113L));
 	}
 	
 	@Test
@@ -29,10 +33,32 @@ public class ReplyMapperTests {
 		ReplyVO vo = new ReplyVO();
 		
 		vo.setBno(113L);
-		vo.setReply("220425 Reply");
-		vo.setReplyer("Tom");
+		vo.setReply("220425 Reply2");
+		vo.setReplyer("Tom2");
 		
 		log.info(mapper.insert(vo));
+	}
+	
+	@Test
+	public void readTest() {
+		log.info("로그 readTest() : " + mapper.read(113L));
+	}
+	
+	@Test
+	public void deleteTest() {
+		Long target = 43L;
+		mapper.delete(target);
+	}
+
+	@Test
+	public void testUpdate() {
+		ReplyVO vo = mapper.read(42L);
+		log.info(vo);
+		
+		vo.setReply("update Reply"); 
+		int count = mapper.update(vo);
+		log.info("수정 완료 : : " + count);
+ 
 	}
 	
 }
