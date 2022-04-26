@@ -70,10 +70,13 @@
 </div>
 <!-- /.row -->
 
+<script type="text/javascript" src="/resources/js/reply.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	console.log("board.bno : " + ${board.bno});
 	console.log("cri.pageNum : " + ${cri.pageNum});
+	console.log(replyService);
 	
 	<!-- 조회 페이지에서 form 처리 -->
 	var operForm = $("#operForm");
@@ -90,4 +93,111 @@ $(document).ready(function() {
 	});
 });
 </script>
+
+<script type="text/javascript">
+	console.log("==========");		
+	console.log("JS TEST2");	
+	
+	
+	var bnoValue ='<c:out value="${board.bno}"/>';
+	var replyUL = $(".chat");
+
+	//function getList(param, callback, error)
+	replyService.getList({bno:bnoValue, page: 1}, //param
+		function(list){ //callback
+			for (var i = 0, len = list.length||0; i < len; i++) { 
+				console.log(list[i]);
+		} 
+	});
+	
+	
+	//R 댓글 가져오기
+	showList(1);
+	
+	function showList(page) {
+		console.log("show list page : " + page);
+		
+		replyService.getList({bno:bnoValue, page: page || 1}, 
+			function(replyCnt, list){
+			
+			console.log("replyCnt: " + replyCnt);
+			console.log("list: " + list);
+			
+			if(page == -1) {
+				pageNum = Math.ceil(replyCnt/10.0);
+				showList(pageNum);
+				return;
+			}
+			
+			var str = "";
+			
+			if(list == null || list.length == 0) { 
+				return;
+			}
+			
+			for (var i = 0,  len = list.length || 0; i < len; i++ ){
+				str +="<li class='left clearfix' data-rno='" + list[i].rno + "'>";
+				str +="  <div><div class='header'><strong class='primary-font'>["
+			    	   +list[i].rno+"] "+list[i].replyer+"</strong>"; 
+				str +="		<small class='pull-right text-muted'>"
+					+replyService.displayTime(list[i].replyDate)+"</small></div>";
+				str +="		<p>"+list[i].reply+"</p></div></li>";
+		  	}
+
+		     replyUL.html(str);
+		     
+		     showReplyPage(replyCnt);
+			
+		});//end replyService.getList 
+	}//end showList(page) 
+
+	
+	
+	
+	/*	
+	댓글 CRUD Test
+	//C 댓글 추가 확인
+	replyService.add(
+	{reply:"JS TEST4", replyer:"tester4", bno:bnoValue}
+	,
+		function(result) {
+			alert("Result: " + result);	
+		})
+	
+	//R 댓글 읽기 확인
+	replyService.get(53, function(data) { 
+		console.log("replyService.get_data값 확인 : " + data);
+	}); 
+	
+	//U 댓글 수정 확인
+	replyService.update({
+		rno : 54,
+		bno : bnoValue,
+		reply : "Modified...2",
+		replyer : "Tom"
+		}, 
+		function(result){
+			alert("수정완료");		
+		});	
+	
+	//D 댓글 삭제 확인 
+	replyService.remove(55, function(count) {
+		console.log("get.jsp_replyService.remove() : " + count);
+		//삭제가 되면 ResponseEntity<String>로 받아온 값 "success"가 count에 담긴다.
+		//new ResponseEntity<>("success", HttpStatus.OK)
+		
+		console.log("Removed...");
+		
+		if (count === "success") {
+			alert("Removed");
+		}
+			
+		}, function(err) {
+			alert("Error");
+		});
+	*/
+
+</script>
+
+
 <%@include file="../includes/footer.jsp"%>

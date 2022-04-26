@@ -14,99 +14,82 @@ var replyService = (function() {
 				if (callback) {
 					callback(result);
 				}
+			}, //success
+			error : function(xhr, status, er) {
+				if (error) {
+					error(er);
+				}
+			} //error
+		}) //ajax
+	} //function add
+	
+	function getList(param, callback, error) {
+	
+	var bno = param.bno;
+	var page = param.page || 1;
+		
+		/*getJSON url을 통해 ReplyController(REST)가 실행되고
+		Mapping에 맞춰 메소드를 실행.
+		실행된 메소드를 통해 받아온 JSON데이터 들이 function(data)에 data로 담긴다.*/
+		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
+			function(data) { 
+			
+			if (callback) {
+					callback(data); // 댓글 목록만 가져오는 경우 
+					//callback(data.replyCnt, data.list); //댓글 숫자와 목록을 가져오는 경우 
+				}
+				
+			}).fail(function(xhr, status, err) {
+				
+				if (error) {
+					error();
+				}
+			
+		});
+	}
+/*
+	function remove(rno, replyer, callback, error) {
+		  
+	console.log("reply.js_remove()---------------------------------");  
+	console.log(JSON.stringify({rno:rno, replyer:replyer}));  
+	    
+	$.ajax({
+		type : 'delete',
+		url : '/replies/' + rno,
+		data:  JSON.stringify({rno:rno, replyer:replyer}),
+		contentType: "application/json; charset=utf-8",
+		
+		success : function(deleteResult, status, xhr) {
+			if (callback) {
+				callback(deleteResult);
+			}
+		},
+		
+		error : function(xhr, status, er) {
+			if (error) {
+				error(er);
+			}
+		}
+	});
+	}
+*/
+	function remove(rno, callback, error) {
+		$.ajax({
+			type : 'delete',
+			url : '/replies/'+rno,
+			success : function(deleteResult, status, xhr) {
+				if (callback) {
+					callback(deleteResult);
+				}
 			},
 			error : function(xhr, status, er) {
 				if (error) {
 					error(er);
 				}
 			}
-		})
-	}
-
-//	function getList(param, callback, error) {
-//
-//		var bno = param.bno;
-//		var page = param.page || 1;
-//
-//		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
-//				function(data) {
-//					if (callback) {
-//						callback(data);
-//					}
-//				}).fail(function(xhr, status, err) {
-//			if (error) {
-//				error();
-//			}
-//		});
-//	}
-	
-	
-
-	function getList(param, callback, error) {
-
-	    var bno = param.bno;
-	    var page = param.page || 1;
-	    
-	    $.getJSON("/replies/pages/" + bno + "/" + page + ".json",
-	        function(data) {
-	    	
-	          if (callback) {
-	            //callback(data); // 댓글 목록만 가져오는 경우 
-	            callback(data.replyCnt, data.list); //댓글 숫자와 목록을 가져오는 경우 
-	          }
-	        }).fail(function(xhr, status, err) {
-	      if (error) {
-	        error();
-	      }
-	    });
-	  }
-
-	
-//	function remove(rno, callback, error) {
-//		$.ajax({
-//			type : 'delete',
-//			url : '/replies/' + rno,
-//			success : function(deleteResult, status, xhr) {
-//				if (callback) {
-//					callback(deleteResult);
-//				}
-//			},
-//			error : function(xhr, status, er) {
-//				if (error) {
-//					error(er);
-//				}
-//			}
-//		});
-//	}
-	
-	  function remove(rno, replyer, callback, error) {
-		  
-		  
-		console.log("--------------------------------------");  
-		console.log(JSON.stringify({rno:rno, replyer:replyer}));  
-		    
-	    $.ajax({
-	      type : 'delete',
-	      url : '/replies/' + rno,
-	      
-	      data:  JSON.stringify({rno:rno, replyer:replyer}),
-	      
-	      contentType: "application/json; charset=utf-8",
-	      
-	      success : function(deleteResult, status, xhr) {
-	        if (callback) {
-	          callback(deleteResult);
-	        }
-	      },
-	      error : function(xhr, status, er) {
-	        if (error) {
-	          error(er);
-	        }
-	      }
-	    });
-	  }
-
-
+		});//$.ajax
+		}//function remove
+		
 	function update(reply, callback, error) {
 
 		console.log("RNO: " + reply.rno);

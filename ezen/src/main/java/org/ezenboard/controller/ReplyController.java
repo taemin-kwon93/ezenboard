@@ -2,7 +2,6 @@ package org.ezenboard.controller;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.ezenboard.domain.Criteria;
 import org.ezenboard.domain.ReplyVO;
 import org.ezenboard.service.ReplyService;
