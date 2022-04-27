@@ -137,7 +137,13 @@ var replyService = (function() {
 		var str = "";
 
 		if (gap < (1000 * 60 * 60 * 24)) {
-
+		/*  
+			 의도한바에 비추어 잘못된 계산임. 
+			글의 최초등록시간을 기준으로 24시간이 지났을 때
+			시간표시가 아닌 날짜 표시로 전환함.
+			즉, 4월 26일 오후 7시에 등록된 글이 
+			4월 27일 오후 4시에 '19:59:49' 이런식으로 보이게 됨.
+		*/
 			var hh = dateObj.getHours();
 			var mi = dateObj.getMinutes();
 			var ss = dateObj.getSeconds();
@@ -152,9 +158,8 @@ var replyService = (function() {
 
 			return [ yy, '/', (mm > 9 ? '' : '0') + mm, '/',
 					(dd > 9 ? '' : '0') + dd ].join('');
-		}
-	}
-	;
+		}//2022/4/25 -> 22/04/25 이런식으로 형식을 맞춰서 표시해줌.
+	};
 
 	return {
 		add : add,

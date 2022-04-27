@@ -13,6 +13,7 @@
   </div>
 </div>
 
+<!-- Board 게시글 -->
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default">
@@ -70,6 +71,30 @@
 </div>
 <!-- /.row -->
 
+<!-- Reply 댓글 목록 -->
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-comments fa-fw"></i> Reply
+				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+			</div>
+			<!-- /.panel-heading -->
+			
+			<div class="panel-body">
+				<ul class="chat">
+
+				</ul>
+				<!-- end chat -->
+			</div>
+			<!-- /.panel-body -->
+			<div class="panel-footer"></div>
+		</div>
+	</div>
+	<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 
 <script type="text/javascript">
@@ -118,10 +143,13 @@ $(document).ready(function() {
 		console.log("show list page : " + page);
 		
 		replyService.getList({bno:bnoValue, page: page || 1}, 
-			function(replyCnt, list){
-			
-			console.log("replyCnt: " + replyCnt);
+			function(list){ // replyCnt, 
+			var today = new Date();
+			//console.log("replyCnt: " + replyCnt);
 			console.log("list: " + list);
+			console.log("list[4].replyDate: " + list[4].replyDate);
+			console.log("list[6].replyDate: " + list[6].replyDate);
+			console.log("today.getTime()" + today.getTime());
 			
 			if(page == -1) {
 				pageNum = Math.ceil(replyCnt/10.0);
@@ -146,7 +174,7 @@ $(document).ready(function() {
 
 		     replyUL.html(str);
 		     
-		     showReplyPage(replyCnt);
+		     //showReplyPage(replyCnt);
 			
 		});//end replyService.getList 
 	}//end showList(page) 
@@ -158,7 +186,7 @@ $(document).ready(function() {
 	댓글 CRUD Test
 	//C 댓글 추가 확인
 	replyService.add(
-	{reply:"JS TEST4", replyer:"tester4", bno:bnoValue}
+	{reply:"0427", replyer:"0427", bno:bnoValue}
 	,
 		function(result) {
 			alert("Result: " + result);	
