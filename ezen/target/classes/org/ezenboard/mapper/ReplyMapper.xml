@@ -7,16 +7,16 @@
 <select id="getReplyList" resultType="org.ezenboard.domain.ReplyVO">
 <![CDATA[
 	SELECT rno, bno, reply, replyer, replydate, updatedate 
-	FROM tbl_reply
-	WHERE bno = #{bno}
-	ORDER BY rno ASC
+	FROM  
+		(SELECT /*+INDEX(tbl_reply idx_reply_sec) */  
+			ROWNUM rn, rno, bno, reply, replyer, replyDate, updatedate  
+		FROM tbl_reply 
+		WHERE bno = #{bno} 
+			AND rno > 0 
+			AND rownum <= #{cri.pageNum} * #{cri.amount}) 
+	WHERE rn > (#{cri.pageNum} -1) * #{cri.amount} 
 ]]>
 </select>
-
-<insert id="insert">
-	INSERT INTO tbl_reply (rno, bno, reply, replyer, updatedate)
-	VALUES (seq_reply.nextval, #{bno}, #{reply}, #{replyer}, sysdate)
-</insert>
 
 <select id="read" resultType="org.ezenboard.domain.ReplyVO">
 	SELECT * 
@@ -24,15 +24,27 @@
 	WHERE rno = #{rno}
 </select>
 
+<select id="getCountByBno" resultType="int">
+	SELECT count(rno) 
+	FROM tbl_reply
+	WHERE bno = #{bno}
+</select>
+
+<insert id="insert">
+	INSERT INTO tbl_reply (rno, bno, reply, replyer, updatedate)
+	VALUES (seq_reply.nextval, #{bno}, #{reply}, #{replyer}, sysdate)
+</insert>
+
+<update id="update">
+	UPDATE tbl_reply SET reply = #{reply}, updatedate = sysdate 
+	WHERE rno = #{rno}
+</update>
+
 <delete id="delete">
 	DELETE 
 	FROM tbl_reply 
 	WHERE rno = #{rno}
 </delete>
 
-<update id="update">
-	UPDATE tbl_reply SET reply = #{reply}, updatedate = sysdate 
-	WHERE rno = #{rno}
-</update>
 
 </mapper>

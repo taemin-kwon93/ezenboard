@@ -3,6 +3,7 @@ package org.ezenboard.service;
 import java.util.List;
 
 import org.ezenboard.domain.Criteria;
+import org.ezenboard.domain.ReplyPageDTO;
 import org.ezenboard.domain.ReplyVO;
 import org.ezenboard.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,15 @@ public class ReplyServiceImpl implements ReplyService {
 	public List<ReplyVO> getList(Criteria cri, Long bno) {
 		log.info("getList(Criteria cri, Long bno) : " + bno);
 		return mapper.getReplyList(cri, bno);
+	}
+
+	@Override
+	public ReplyPageDTO getListPage(Criteria cri, Long bno) {
+		//cri를 통해서 list생성, bno를 통해서 replyCnt생성.
+		
+		return new ReplyPageDTO(
+				mapper.getCountByBno(bno),
+				mapper.getReplyList(cri, bno));
 	}
 
 }

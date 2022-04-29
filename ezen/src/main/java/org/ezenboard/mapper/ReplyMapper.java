@@ -12,14 +12,16 @@ public interface ReplyMapper {
 			@Param("cri") Criteria cri,
 			@Param("bno") Long bno);
 	
-	public int insert(ReplyVO vo);
-	
+	public int getCountByBno(Long bno);
+
 	public ReplyVO read(Long rno);
 	//public ReplyVO read(Long bno);
 	
-	public int delete(Long rno);
+	public int insert(ReplyVO vo);
 	
 	public int update(ReplyVO vo); 
+
+	public int delete(Long rno);
 	
 	
 }

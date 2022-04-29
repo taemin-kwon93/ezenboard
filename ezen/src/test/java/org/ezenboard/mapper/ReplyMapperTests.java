@@ -58,7 +58,19 @@ public class ReplyMapperTests {
 		vo.setReply("update Reply"); 
 		int count = mapper.update(vo);
 		log.info("수정 완료 : : " + count);
- 
+	}
+	
+	@Test
+	public void replyPagingTest() {
+		Criteria cri = new Criteria(3, 5);
+		
+		mapper.getReplyList(cri, 113L);
+	}
+	
+	@Test
+	public void replyCountTest() {
+		Long bno = 113L;
+		mapper.getCountByBno(bno);
 	}
 	
 }

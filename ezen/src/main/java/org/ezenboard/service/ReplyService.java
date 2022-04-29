@@ -3,6 +3,7 @@ package org.ezenboard.service;
 import java.util.List;
 
 import org.ezenboard.domain.Criteria;
+import org.ezenboard.domain.ReplyPageDTO;
 import org.ezenboard.domain.ReplyVO;
 //import org.ezenboard.domain.ReplyPageDTO;
 
@@ -18,6 +19,6 @@ public interface ReplyService {
 
 	public List<ReplyVO> getList(Criteria cri, Long bno);
 
-	//public ReplyPageDTO getListPage(Criteria cri, Long bno);
+	public ReplyPageDTO getListPage(Criteria cri, Long bno);
 
 }

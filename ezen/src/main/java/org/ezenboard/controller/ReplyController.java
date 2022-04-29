@@ -3,6 +3,7 @@ package org.ezenboard.controller;
 import java.util.List;
 
 import org.ezenboard.domain.Criteria;
+import org.ezenboard.domain.ReplyPageDTO;
 import org.ezenboard.domain.ReplyVO;
 import org.ezenboard.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +48,12 @@ public class ReplyController {
 	@GetMapping(value = "/pages/{bno}/{page}",
 			produces = {MediaType.APPLICATION_XML_VALUE,
 						MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public ResponseEntity<List<ReplyVO>> getList(
+	public ResponseEntity<ReplyPageDTO> getList(
 			@PathVariable("bno") Long bno,
 			@PathVariable("page") int page) {
 		
 		Criteria cri = new Criteria(page, 10);
-		return new ResponseEntity<>(service.getList(cri, bno), HttpStatus.OK);
+		return new ResponseEntity<>(service.getListPage(cri, bno), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/{rno}",
