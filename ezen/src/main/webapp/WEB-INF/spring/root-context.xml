@@ -44,17 +44,14 @@
 	
 	<mybatis-spring:scan
 		base-package="org.ezenboard.mapper" />
-
-	<context:component-scan
-		base-package="org.ezenboard.service"></context:component-scan>
-	<context:component-scan
-		base-package="org.ezenboard.aop"></context:component-scan>
-		
-	<context:component-scan
-    base-package="org.ezenboard.task"></context:component-scan>
-		
-
-	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 	
+	<!-- LogAdvice에 @Before를 동작시킴. -->
+	<aop:aspectj-autoproxy/>
 	
+	<context:annotation-config/>
+	
+	<context:component-scan base-package="org.ezenboard.service"/>
+	<context:component-scan base-package="org.ezenboard.aop"/>
+	<context:component-scan base-package="org.ezenboard.task"/>
+		
 </beans>
