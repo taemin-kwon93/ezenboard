@@ -33,7 +33,7 @@ public class BoardController {
 	public void list(Criteria cri, Model model) {
 		
 		model.addAttribute("list", service.getListWithPaging(cri));
-
+		
 		int total = service.getTotalCount(cri);
 		log.info("list with paging, total : " + total);
 		

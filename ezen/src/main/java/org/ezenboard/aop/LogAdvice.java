@@ -16,26 +16,21 @@ import lombok.extern.log4j.Log4j;
 @Component
 public class LogAdvice {
 	
-	@Before("execution(* org.ezenboard.service.SampleService*.*(..))")
-	public void logBefore() {
-		log.info("================");
-	}
-
-	@Before("execution(* org.ezenboard.service.SampleService*.doAdd(String, String))"
-			+ "&& args(str1, str2)")
-	public void logBeforeWithParam(String str1, String str2) {
-		log.info("================");
-		log.info(str1);
-		log.info(str2);
-	}
+	/*
+	 * @Before("execution(* org.ezenboard.service.SampleService*.*(..))") public
+	 * void logBefore() { log.info("================"); }
+	 * 
+	 * @Before("execution(* org.ezenboard.service.SampleService*.doAdd(String, String))"
+	 * + "&& args(str1, str2)") public void logBeforeWithParam(String str1, String
+	 * str2) { log.info("================"); log.info(str1); log.info(str2); }
+	 * 
+	 * @AfterThrowing(pointcut =
+	 * "execution(* org.ezenboard.service.SampleService*.*(..))", throwing =
+	 * "exception") public void afterException(Exception exception) {
+	 * log.info("exception발생 : " + exception); }
+	 */
 	
-	@AfterThrowing(pointcut = "execution(* org.ezenboard.service.SampleService*.*(..))",
-			throwing = "exception")
-	public void afterException(Exception exception) {
-		log.info("exception발생 : " + exception);
-	}
-	
-	@Around("execution(* org.ezenboard.service.SampleService*.*(..))")
+	@Around("execution(* org.ezenboard.service.BoardService*.*(..))")
 	public Object logTime(ProceedingJoinPoint pjp) {
 
 		long start = System.currentTimeMillis();

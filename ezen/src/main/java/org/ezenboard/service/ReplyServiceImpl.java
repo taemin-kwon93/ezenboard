@@ -5,6 +5,7 @@ import java.util.List;
 import org.ezenboard.domain.Criteria;
 import org.ezenboard.domain.ReplyPageDTO;
 import org.ezenboard.domain.ReplyVO;
+import org.ezenboard.mapper.BoardMapper;
 import org.ezenboard.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,16 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class ReplyServiceImpl implements ReplyService {
 
-	@Setter(onMethod_ = @Autowired)
+	@Setter(onMethod_ = {@Autowired})
 	private ReplyMapper mapper;
+
+	@Setter(onMethod_ = @Autowired)
+	private BoardMapper boardMapper;
 	
 	@Override
 	public int register(ReplyVO vo) {
 		log.info("register(ReplyVO vo) : " + vo);
+		boardMapper.updateReplyCnt(vo.getBno(), 1);
 		return mapper.insert(vo);
 	}
 
@@ -40,6 +45,8 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public int remove(Long rno) {
 		log.info("remove(Long rno) : " + rno);
+		ReplyVO vo = mapper.read(rno);
+		boardMapper.updateReplyCnt(vo.getBno(), -1);
 		return mapper.delete(rno);
 	}
 

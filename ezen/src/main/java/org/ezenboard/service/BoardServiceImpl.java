@@ -5,6 +5,7 @@ import java.util.List;
 import org.ezenboard.domain.BoardVO;
 import org.ezenboard.domain.Criteria;
 import org.ezenboard.mapper.BoardMapper;
+import org.ezenboard.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,36 +19,26 @@ import lombok.extern.log4j.Log4j;
 public class BoardServiceImpl implements BoardService {
 	
 	//root-context.xml 설정 'context'체크 이후 component-scan에 service pack 등록
-	
-	@Setter(onMethod_ = @Autowired)
+	@Setter(onMethod_ = {@Autowired})
 	private BoardMapper mapper;
-
-	/*
-	 * @Override public List<BoardVO> getList() { log.info("getList() 실행 : " +
-	 * mapper.getList()); return mapper.getList(); }
-	 */
+	
+	@Override
+	public List<BoardVO> getListWithPaging(Criteria cri) {
+		return mapper.getListWithPaging(cri);
+	}
 	
 	@Override
 	public int getTotalCount(Criteria cri) {
-		log.info("getTotalCount cri : " + cri);
 		return mapper.getTotalCount(cri);
 	}
 
 	@Override
-	public List<BoardVO> getListWithPaging(Criteria cri) {
-		log.info("getListWithPaging 실행 cri : " + cri);
-		return mapper.getListWithPaging(cri);
-	}
-
-	@Override
 	public void register(BoardVO board) {
-		log.info("글 등록 : " + board);
 		mapper.insertSelectKey(board);
 	}
 
 	@Override
 	public BoardVO get(Long bno) {
-		log.info("글 읽기 번호 : " + bno);
 		return mapper.read(bno);
 	}
 
