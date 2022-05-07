@@ -23,7 +23,7 @@
 
 <div class='uploadResult'>
 	<ul>
-		
+		<!-- 사진이 업로드되면 해당 부분에 썸네일을 띄운다. -->
 	</ul>
 </div>
 
@@ -40,7 +40,7 @@
 		
 			$(".bigPicture")
 			.html("<img src='/display?fileName=" + encodeURI(fileCallPath) + "'>")
-			.animate({width:'100%', height:'100%'}, 0);
+			.animate({width:'10%', height:'10%'}, 0);
 		
 	}
 	
