@@ -1,6 +1,7 @@
 package org.ezenboard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,6 +14,8 @@ public class BoardVO {
 	private String writer;
 	private Date regdate;
 	private Date updateDate;
+	
+	private List<BoardAttachVO> attachList;
 	
 	private int replyCnt;
 }
