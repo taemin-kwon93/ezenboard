@@ -6,14 +6,54 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-<link rel="stylesheet" href="/resources/css/boardstyle.css"></link>	
+<style>
+.uploadResult {
+	width: 100%;
+	background-color: gray;
+}
+
+.uploadResult ul {
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.uploadResult ul li {
+	list-style: none;
+	padding: 10px;
+}
+
+.uploadResult ul li img {
+	width: 100px;
+}
+
+.bigPictureWrapper {
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	z-index: 100;
+}
+
+.bigPicture {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+</style>  	
 
 </head>
 
 <body>
 <div class='bigPictureWrapper'>
-  <div class='bigPicture'>
-  </div>
+	<div class='bigPicture'>
+	</div>
 </div>
 
 <div class='uploadDiv'>
@@ -31,21 +71,19 @@
 
 <!-- jQuery 라이브러리 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-		
+
 <script>
 
 	function showImage(fileCallPath) {
-		//alert(fileCallPath);		
 		$(".bigPictureWrapper").css("display", "flex").show();
 		
 			$(".bigPicture")
 			.html("<img src='/display?fileName=" + encodeURI(fileCallPath) + "'>")
-			.animate({width:'10%', height:'10%'}, 0);
-		
+			.animate({width:'25%', height:'25%'}, 0);
 	}
 	
 	$(".bigPictureWrapper").on("click", function(e){
-		$(".bigPicture").animate({width:'0%', height:'0%'}, 0);
+		$(".bigPicture").animate({width:'0%', height:'0%'}, 1000);
 		setTimeout(function(){
 			$(".bigPictureWrapper").hide();
 			}, 1000);
@@ -67,7 +105,7 @@ $(document).ready(function(){
 			return false;
 		}
 		return true;
-	}//func checkExtension
+	}
 	
 	var cloneObj = $(".uploadDiv").clone();
 	
@@ -126,9 +164,9 @@ $(document).ready(function(){
 			showUploadedFile(result);
 			$(".uploadDiv").html(cloneObj.html());
 		}
-	});//$.ajax
+	});
 	
-	});//$("#uploadBtn").on("click", function(e){});
+	});
 	
 	$(".uploadResult").on("click", "span", function(e){
 		var targetFile = $(this).data("file");
@@ -143,9 +181,9 @@ $(document).ready(function(){
 			success: function(result){
 				alert(result);
 			}
-		});//$.ajax
+		});
 		
-	});//$(".uploadResult").on("click", "span", function(e){});
+	});
 	
 });
 
