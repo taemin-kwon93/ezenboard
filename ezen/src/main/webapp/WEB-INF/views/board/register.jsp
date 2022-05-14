@@ -136,7 +136,7 @@ $(document).ready(function(){
 			
 		});
 		formObj.append(str).submit();
-	});
+	}); 
 	
 	
 	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
@@ -153,7 +153,102 @@ $(document).ready(function(){
 		}
 		return true;
 	}
-});	
+	
+
+	$("input[type='file']").change(function(e) { 
+		
+		var formData = new FormData();
+		var inputFile = $("input[name='uploadFile']");
+		var files = inputFile[0].files;
+	
+		for (var i = 0; i < files.length; i++) {
+			if (!checkExtension(
+				files[i].name, files[i].size)) {
+				return false;
+			}
+			formData.append("uploadFile", files[i]);
+		}
+
+		$.ajax({
+			url : '/uploadAjaxAction',
+			processData : false,
+			contentType : false,
+			/* beforeSend : function(xhr) {
+				xhr.setRequestHeader(
+						csrfHeaderName,
+						csrfTokenValue);
+			}, */
+			data : formData,
+			type : 'POST',
+			dataType : 'json',
+			success : function(result) {
+				console.log(result);
+				showUploadResult(result);
+			}
+		}); 
+	});
+	
+	
+	function showUploadResult(uploadResultArr){
+	if(!uploadResultArr || uploadResultArr.length == 0){ return; }
+	var uploadUL = $(".uploadResult ul");
+	var str ="";
+	
+	$(uploadResultArr).each(function(i, obj){
+		if(obj.image){
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
+			str += "<li><div>";
+			str += "<span> "+ obj.fileName+"</span>";
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='image' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			str += "<img src='/display?fileName="+fileCallPath+"'>";
+			str += "</div>";
+			str +"</li>";
+		}else{
+			var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);            
+			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+			    
+			str += "<li><div>";
+			str += "<span> "+ obj.fileName+"</span>";
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file' class='btn btn-warning btn-circle'><i class='fa fa-times'></i></button><br>";
+			str += "<img src='/resources/img/attach.png'></a>";
+			str += "</div>";
+			str +"</li>";
+			} 
+		});
+		   
+		uploadUL.append(str);
+		}
+	
+	 
+	$(".uploadResult").on("click", "button", function(e) {
+	
+	console.log("delete file");
+	
+	var targetFile = $(this).data("file");
+	var type = $(this).data("type");
+	var targetLi = $(this).closest("li");
+	
+		$.ajax({
+		url : '/deleteFile',
+		data : {
+			fileName : targetFile,
+			type : type
+		},
+		/* beforeSend : function(xhr) {
+			xhr.setRequestHeader(
+					csrfHeaderName,
+					csrfTokenValue);
+		}, */
+		dataType : 'text',
+		type : 'POST',
+		success : function(result) {
+			alert(result);
+			targetLi.remove();
+			}
+		}); 
+	});
+
+});
 </script>
 
 <%@include file="../includes/footer.jsp"%>
