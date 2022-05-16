@@ -47,32 +47,7 @@ var replyService = (function() {
 			
 		});
 	}
-/*
-	function remove(rno, replyer, callback, error) {
-		  
-	console.log("reply.js_remove()---------------------------------");  
-	console.log(JSON.stringify({rno:rno, replyer:replyer}));  
-	    
-	$.ajax({
-		type : 'delete',
-		url : '/replies/' + rno,
-		data:  JSON.stringify({rno:rno, replyer:replyer}),
-		contentType: "application/json; charset=utf-8",
-		
-		success : function(deleteResult, status, xhr) {
-			if (callback) {
-				callback(deleteResult);
-			}
-		},
-		
-		error : function(xhr, status, er) {
-			if (error) {
-				error(er);
-			}
-		}
-	});
-	}
-*/
+
 	function remove(rno, callback, error) {
 		$.ajax({
 			type : 'delete',
@@ -87,8 +62,8 @@ var replyService = (function() {
 					error(er);
 				}
 			}
-		});//$.ajax
-		}//function remove
+		});
+		}
 		
 	function update(reply, callback, error) {
 
