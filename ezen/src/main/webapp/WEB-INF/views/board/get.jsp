@@ -4,8 +4,53 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../includes/header.jsp"%>
 
-<!-- 이미지 파일들 테스트 할때 해당 link를 보도록 하자. -->
-<link rel="stylesheet" href="/resources/css/boardstyle.css"></link>
+<style>
+.uploadResult {
+	width:100%;
+	background-color: gray;
+}
+.uploadResult ul{
+	display:flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+}
+.uploadResult ul li {
+	list-style: none;
+	padding: 10px;
+	align-content: center;
+	text-align: center;
+}
+.uploadResult ul li img{
+	width: 100px;
+}
+.uploadResult ul li span {
+	color:white;
+}
+.bigPictureWrapper {
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top:0%;
+	width:100%;
+	height:100%;
+	background-color: gray; 
+	z-index: 100;
+	background:rgba(255,255,255,0.5);
+}
+.bigPicture {
+	position: relative;
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.bigPicture img {
+	width:600px;
+}
+
+</style>
 
 <div class="row">
   <div class="col-lg-12">
@@ -62,14 +107,37 @@
 						<input type='hidden' name='type' value='<c:out value="${cri.type}"/>'>  
 					</form>
 			</div>
-			<!--  end panel-body -->
-
 		</div>
-		<!--  end panel-body -->
 	</div>
-	<!-- end panel -->
 </div>
-<!-- /.row -->
+
+<div class='bigPictureWrapper'>
+	<div class='bigPicture'>
+	
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+		
+		<div class="panel-heading">File Attach</div>
+			<div class="panel-body">
+			<div class="form-group uploadDiv">
+				<input type="file" name='uploadFile' multiple>
+			</div>
+			
+			<div class='uploadResult'> 
+				<ul>
+				
+				</ul>
+			</div>
+			        
+			        
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- Reply 댓글 목록 -->
 <div class="row">
@@ -79,23 +147,18 @@
 				<i class="fa fa-comments fa-fw"></i> Reply
 				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
 			</div>
-			<!-- /.panel-heading -->
 			
 			<div class="panel-body">
 				<ul class="chat">
 
 				</ul>
-				<!-- end chat -->
 			</div>
-			<!-- /.panel-body -->
 			<div class="panel-footer">
 			
 			</div>
 		</div>
 	</div>
-	<!-- /.col-lg-12 -->
 </div>
-<!-- /.row -->
 
 <!-- 모달창 추가 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
@@ -137,24 +200,67 @@
 				<button id='modalCloseBtn' type="button" class="btn btn-default">Close</button>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-	console.log("board.bno : " + ${board.bno});
-	console.log("cri.pageNum : " + ${cri.pageNum});
-	console.log(replyService);
+	var bno = '<c:out value="${board.bno}"/>';
 	
-	<!-- 조회 페이지에서 form 처리 -->
-	var operForm = $("#operForm");
+	$.getJSON("/board/getAttachList", {bno: bno}, function(arr){
+	var str = "";
+	
+	$(arr).each(function(i, attach){
+		if(attach.fileType){
+		var fileCallPath =  encodeURIComponent( attach.uploadPath+ "/s_"+attach.uuid +"_"+attach.fileName);
+			str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
+			str += "<img src='/display?fileName="+fileCallPath+"'>";
+			str += "</div>";
+			str +"</li>";
+		}else{
+			str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' ><div>";
+			str += "<span> "+ attach.fileName+"</span><br/>";
+			str += "<img src='/resources/img/attach.png'></a>";
+			str += "</div>";
+			str +"</li>";
+		}
+	});
+		$(".uploadResult ul").html(str);
+	}); 
 
+	$(".uploadResult").on("click","li", function(e){
+	var liObj = $(this);
+	var path = encodeURIComponent(liObj.data("path")+"/" + liObj.data("uuid")+"_" + liObj.data("filename"));
+	
+		if(liObj.data("type")){
+		  showImage(path.replace(new RegExp(/\\/g),"/"));
+		}else {
+		  //download 
+		  self.location ="/download?fileName="+path
+		}
+	
+	});
+	
+	function showImage(fileCallPath){
+		    
+	$(".bigPictureWrapper").css("display","flex").show();
+	$(".bigPicture")
+	.html("<img src='/display?fileName="+fileCallPath+"' >")
+	.animate({width:'100%', height: '100%'}, 1000);
+	}
+	
+	$(".bigPictureWrapper").on("click", function(e){
+	$(".bigPicture").animate({width:'100%', height: '100%'}, 1000);
+		setTimeout(function(){
+		$('.bigPictureWrapper').hide();
+		}, 1000);
+	});
+
+	
+	var operForm = $("#operForm");
 	$("button[data-oper='modify']").on("click", function(e) {
 		operForm.attr("action", "/board/modify").submit();
 	});
@@ -166,6 +272,7 @@ $(document).ready(function() {
 
 	});
 });
+
 </script>
 
 <script type="text/javascript">
@@ -213,8 +320,8 @@ $(document).ready(function() {
 		     
 		     showReplyPage(replyCnt);
 			
-		});//end replyService.getList 
-	}//end showList(page) 
+		});
+	}
 
 	var pageNum = 1;
 	var replyPageFooter = $(".panel-footer");
@@ -254,7 +361,7 @@ $(document).ready(function() {
 		console.log(str);
 		
 		replyPageFooter.html(str);
-	} // end showReplyPage()
+	} 
 		 
 	replyPageFooter.on("click","li a", function(e){
 	
@@ -288,7 +395,6 @@ $(document).ready(function() {
 	//댓글 등록 버튼
 	$("#addReplyBtn").on("click", function(e){
 		modal.find("input").val("");
-		//modal.find("input[name='replyer']").val(replyer);
 		modalInputReplyDate.closest("div").hide();
 		modal.find("button[id !='modalCloseBtn']").hide();
 		
@@ -312,9 +418,9 @@ $(document).ready(function() {
 			modal.find("input").val("");
 			modal.modal("hide");
 		    showList(-1); 
-		}); //end replyService.add
+		});
 		
-	}); //end modalRegisterBtn.on
+	});
 	
 	//댓글 클릭시 해당 댓글정보 모달창으로 띄우기.
 	$(".chat").on("click", "li", function(e){
@@ -336,7 +442,7 @@ $(document).ready(function() {
 			$(".modal").modal("show");
 		      
 		});
-	}); //end $(".chat")
+	});
 		  
 	//댓글 수정
 	modalModBtn.on("click", function(e){
@@ -369,59 +475,8 @@ $(document).ready(function() {
 	  
 	}); 
 
-}); //$(document).ready(function()
+}); 
 		
-	/*	
-	220426 Test완료. 완성 후 삭제할것.
-	
-	댓글 CRUD Test
-	//C 댓글 추가 확인
-	replyService.add(
-	{reply:"0427", replyer:"0427", bno:bnoValue}
-	,
-		function(result) {
-			alert("Result: " + result);	
-		})
-	
-	//R 댓글 읽기 확인
-	replyService.get(53, function(data) { 
-		console.log("replyService.get_data값 확인 : " + data);
-	}); 
-	
-	//R function getList(param, callback, error)
-	replyService.getList({bno:bnoValue, page: 1}, //param
-		function(list){ //callback
-			for (var i = 0, len = list.length||0; i < len; i++) { 
-				console.log(list[i]);
-		} 
-	});
-	//U 댓글 수정 확인
-	replyService.update({
-		rno : 54,
-		bno : bnoValue,
-		reply : "Modified...2",
-		replyer : "Tom"
-		}, 
-		function(result){
-			alert("수정완료");		
-		});	
-	
-	//D 댓글 삭제 확인 
-	replyService.remove(55, function(count) {
-		console.log("get.jsp_replyService.remove() : " + count);
-		//삭제가 되면 ResponseEntity<String>로 받아온 값 "success"가 count에 담긴다.
-		//new ResponseEntity<>("success", HttpStatus.OK)
-		
-		console.log("Removed...");
-		
-		if (count === "success") {
-			alert("Removed");
-		}
-			
-		}, function(err) {
-			alert("Error");
-		});
-	*/
 
 </script>
 
