@@ -70,59 +70,40 @@ public class UploadController {
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<AttachFileDTO>> uploadAjaxPost(MultipartFile[] uploadFile) {
-		
+
 		List<AttachFileDTO> list = new ArrayList<>();
 		String uploadFolder = "C:\\upload";
 		String uploadFolderPath = getFolder();
-		
-		//폴더 만들기, getFolder()사용.
 		File uploadPath = new File(uploadFolder, uploadFolderPath);
-		log.info("저장경로_uploadPath : " + uploadPath);
-		
+
 		if (uploadPath.exists() == false) {
 			uploadPath.mkdirs();
 		}
-		
+
 		for (MultipartFile multipartFile : uploadFile) {
-
-			log.info("-------------------------------------");
-			log.info("Upload File Name: " + multipartFile.getOriginalFilename());
-			log.info("Upload File Size: " + multipartFile.getSize());
-
 			AttachFileDTO attachDTO = new AttachFileDTO();
-			
 			String uploadFileName = multipartFile.getOriginalFilename();
-
-			// IE has file path
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 			log.info("only file name: " + uploadFileName);
 			attachDTO.setFileName(uploadFileName);
 
-			//고유한 파일명을 위해 UUID사용.
 			UUID uuid = UUID.randomUUID();
+
 			uploadFileName = uuid.toString() + "_" + uploadFileName;
-			
+
 			try {
 				File saveFile = new File(uploadPath, uploadFileName);
 				multipartFile.transferTo(saveFile);
-				
 				attachDTO.setUuid(uuid.toString());
 				attachDTO.setUploadPath(uploadFolderPath);
-				
-				if(checkImageType(saveFile)) {
-					
+
+				if (checkImageType(saveFile)) {
 					attachDTO.setImage(true);
-
-					FileOutputStream thumbnail = new FileOutputStream(
-							new File(uploadPath, "s_" + uploadFileName));
-
-					Thumbnailator.createThumbnail(
-							multipartFile.getInputStream(), 
-							thumbnail, 100, 100);
-
+					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
 					thumbnail.close();
 				}
-
+				
 				list.add(attachDTO);
 
 			} catch (Exception e) {

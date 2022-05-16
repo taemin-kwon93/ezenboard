@@ -1,7 +1,5 @@
 package org.ezenboard.controller;
 
-import java.util.List;
-
 import org.ezenboard.domain.Criteria;
 import org.ezenboard.domain.ReplyPageDTO;
 import org.ezenboard.domain.ReplyVO;
