@@ -2,7 +2,7 @@ package org.ezenboard.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
+import org.ezenboard.domain.BoardAttachVO;
 import org.ezenboard.domain.BoardVO;
 import org.ezenboard.domain.Criteria;
 
@@ -22,4 +22,5 @@ public interface BoardService {
 	
 	public boolean modify(BoardVO board);
 	
+	public List<BoardAttachVO> getAttachList(Long bno);
 }

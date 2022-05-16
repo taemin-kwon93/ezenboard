@@ -2,12 +2,14 @@ package org.ezenboard.service;
 
 import java.util.List;
 
+import org.ezenboard.domain.BoardAttachVO;
 import org.ezenboard.domain.BoardVO;
 import org.ezenboard.domain.Criteria;
+import org.ezenboard.mapper.BoardAttachMapper;
 import org.ezenboard.mapper.BoardMapper;
-import org.ezenboard.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -22,6 +24,9 @@ public class BoardServiceImpl implements BoardService {
 	@Setter(onMethod_ = {@Autowired})
 	private BoardMapper mapper;
 	
+	@Setter(onMethod_ = {@Autowired})
+	private BoardAttachMapper attachMapper;
+	
 	@Override
 	public List<BoardVO> getListWithPaging(Criteria cri) {
 		return mapper.getListWithPaging(cri);
@@ -32,9 +37,19 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.getTotalCount(cri);
 	}
 
+	@Transactional
 	@Override
 	public void register(BoardVO board) {
 		mapper.insertSelectKey(board);
+		
+		if(board.getAttachList() == null || board.getAttachList().size() <= 0) {
+			return;
+		}
+		
+		board.getAttachList().forEach(attach -> {
+			attach.setBno(board.getBno());
+			attachMapper.insert(attach);
+		});
 	}
 
 	@Override
@@ -44,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean remove(Long bno) {
-		
+		attachMapper.deleteAll(bno);
 		return mapper.delete(bno) == 1;
 	}
 
@@ -52,6 +67,12 @@ public class BoardServiceImpl implements BoardService {
 	public boolean modify(BoardVO board) {
 		
 		return mapper.update(board) == 1;
+	}
+
+	@Override
+	public List<BoardAttachVO> getAttachList(Long bno) {
+
+		return attachMapper.findByBno(bno);
 	}
 
 }
