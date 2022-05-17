@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -36,9 +37,9 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Log4j
 public class UploadController {
 	
-	@GetMapping("uploadForm")
+	@GetMapping("/uploadForm")
 	public void uploadForm() {
-		log.info("uploadForm()");
+		log.info("upload form");
 	}
 	
 	@GetMapping("/uploadAjax")
@@ -63,8 +64,9 @@ public class UploadController {
 				multipartFile.transferTo(saveFile);
 			} catch (Exception e) {
 				log.error(e.getMessage());
-			} 
-		} 
+			}
+		}
+
 	}
 	
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -103,7 +105,6 @@ public class UploadController {
 					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
 					thumbnail.close();
 				}
-				
 				list.add(attachDTO);
 
 			} catch (Exception e) {
@@ -216,8 +217,10 @@ public class UploadController {
 	}
 	
 	private boolean checkImageType(File file) {
+		
 		try {
 			String contentType = Files.probeContentType(file.toPath());
+			log.info("checkImageType _ contentType.startsWith('image') : " + contentType.startsWith("image"));
 			return contentType.startsWith("image");
 			
 		} catch(IOException e) {

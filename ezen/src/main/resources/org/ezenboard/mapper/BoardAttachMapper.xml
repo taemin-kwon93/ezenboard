@@ -31,7 +31,7 @@
 <select id="getOldFiles" resultType="org.ezenboard.domain.BoardAttachVO">
 	SELECT * 
 	FROM tbl_attach 
-	WHERE uploadpath = TO_CHAR 
+	WHERE uploadpath = TO_CHAR
 	(SYSDATE -1 ,'yyyy\mm\dd')
 </select>
 

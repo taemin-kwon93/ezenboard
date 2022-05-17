@@ -41,11 +41,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void register(BoardVO board) {
 		mapper.insertSelectKey(board);
-		
-		if(board.getAttachList() == null || board.getAttachList().size() <= 0) {
+
+		if (board.getAttachList() == null || board.getAttachList().size() <= 0) {
 			return;
 		}
-		
+
 		board.getAttachList().forEach(attach -> {
 			attach.setBno(board.getBno());
 			attachMapper.insert(attach);
@@ -63,12 +63,27 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.delete(bno) == 1;
 	}
 
+	@Transactional
 	@Override
 	public boolean modify(BoardVO board) {
-		
-		return mapper.update(board) == 1;
-	}
 
+		log.info("modify......" + board);
+
+		attachMapper.deleteAll(board.getBno());
+
+		boolean modifyResult = mapper.update(board) == 1;
+		
+		if (modifyResult && board.getAttachList() != null) {
+
+			board.getAttachList().forEach(attach -> {
+
+				attach.setBno(board.getBno());
+				attachMapper.insert(attach);
+			});
+		}
+
+		return modifyResult;
+	}
 	@Override
 	public List<BoardAttachVO> getAttachList(Long bno) {
 

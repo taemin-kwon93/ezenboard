@@ -134,7 +134,7 @@ $(document).ready(function(){
 		str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
 		str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
 		str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
-		str += "<input type='hidden' name='attachList["+i+"].filetype' value='"+ jobj.data("type")+"'>";
+		str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+ jobj.data("type")+"'>";
 	      
 		});
 		formObj.append(str).submit();
@@ -144,13 +144,13 @@ $(document).ready(function(){
 	var maxSize = 52428800;//50MB
 
 	function checkExtension(fileName, fileSize) {
-		if (fileSize >= maxSize) {
-			alert("파일의 크기가 너무 큽니다.");
-			return false;
-		}
-		if (regex.test(fileName)) {
-			alert("해당 종류의 파일은 업로드 할 수 없습니다.");
-			return false;
+		if(fileSize >= maxSize){
+		      alert("파일 사이즈 초과");
+		      return false;
+	    }
+		if(regex.test(fileName)){
+		    alert("해당 종류의 파일은 업로드할 수 없습니다.");
+		    return false;
 		}
 		return true;
 	}
@@ -161,13 +161,12 @@ $(document).ready(function(){
 		var files = inputFile[0].files;
 
 		for (var i = 0; i < files.length; i++) {
-			if (!checkExtension(
+			if (!checkExtension (
 					files[i].name,
-					files[i].size)) {
+					files[i].size) ) {
 				return false;
 			}
-			formData.append("uploadFile",
-					files[i]);
+			formData.append("uploadFile", files[i]);
 		}
 
 		$.ajax({
