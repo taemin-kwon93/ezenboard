@@ -5,6 +5,17 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	
+	<bean id="customAccessDenied"
+		class="org.ezenboard.security.CustomAccessDeniedHandler" />
+	
+	<bean id="customUserDetailsService" 
+		class="org.ezenboard.security.CustomUserDetailsService" />
+	
+	<bean id="customLoginSuccess" class="org.ezenboard.security.CustomLoginSuccessHandler" />
+	
 	<security:http>
 
 		<security:intercept-url pattern="/sample/all"
@@ -13,24 +24,19 @@
 		<security:intercept-url
 			pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />
 
-		<security:intercept-url pattern="/sample/admin"
+		<security:intercept-url pattern="/sample/admin" 
 			access="hasRole('ROLE_ADMIN')" />
 			
-		<security:form-login />
-		<!--
-		<security:access-denied-handler
-			ref="customAccessDenied" />
-		
 		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess" /> 
-		<security:form-login login-page="/customLogin" />
-		-->
 		
+		<security:access-denied-handler	ref="customAccessDenied" />
 
-		<!-- <security:csrf disabled="true"/> 
-
+		<security:csrf disabled="true"/> 
+		
 		<security:logout logout-url="/customLogout"
 			invalidate-session="true" />
-
+	
+		<!--
 		<security:remember-me
 			data-source-ref="dataSource" token-validity-seconds="604800" />
 
@@ -38,18 +44,27 @@
 			invalidate-session="true" delete-cookies="remember-me,JSESSION_ID" />
 		-->
 	</security:http>
-
-
+	
+	
+<!-- <security:authentication-manager> <security:authentication-provider> 
+		<security:jdbc-user-service data-source-ref="dataSource" /> <security:jdbc-user-service 
+		data-source-ref="dataSource" users-by-username-query="select userid , userpw 
+		, enabled from tbl_member where userid = ? " authorities-by-username-query="select 
+		userid, auth from tbl_member_auth where userid = ? " /> <security:password-encoder 
+		ref="customPasswordEncoder" /> <security:password-encoder ref="bcryptPasswordEncoder" 
+		/> </security:authentication-provider> </security:authentication-manager> -->
+		
+		
 	<security:authentication-manager>
 
-		<!-- <security:authentication-provider
+		<security:authentication-provider
 			user-service-ref="customUserDetailsService">
-
+			
 			<security:password-encoder
 				ref="bcryptPasswordEncoder" />
-
+			
 		</security:authentication-provider>
- -->
+
 	</security:authentication-manager>
 
 </beans>
