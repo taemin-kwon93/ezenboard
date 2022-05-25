@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -66,7 +68,7 @@
 			<div class="panel-heading">Board Modify</div>
 				<div class="panel-body">
 				<form role="form" action="/board/modify" method="post">
-					<input type='hidden' id='bno' name='bno' value='<c:out value="${board.bno}"/>'>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 					<input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
 					<input type='hidden' name='amount' value='<c:out value="${cri.amount}"/>'>
 					<input type='hidden' name='type' value='<c:out value="${cri.type}"/>'>
@@ -88,7 +90,8 @@
 					</div>
 
 					<div class="form-group">
-						<label>Writer</label> <input class="form-control" name='writer'
+						<label>Writer</label> 
+						<input class="form-control" name='writer'
 							value='<c:out value="${board.writer}"/>' readonly="readonly">
 					</div>
 
@@ -105,15 +108,14 @@
 							readonly="readonly">
 					</div>
 
-					<%-- <div class="form-group">
-						<label>Writer</label> <input class="form-control" name='writer'
-							value='<sec:authentication property="principal.username"/>'
-							readonly="readonly">
-					</div> --%>
-					
-					<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
-					<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
-					<button data-oper='list' class="btn btn-info">List</button>
+					<sec:authentication property="principal" var="pinfo"/>
+					<sec:authorize access="isAuthenticated()">
+					<c:if test="${pinfo.username eq board.writer}">
+						<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
+						<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
+					</c:if>
+					</sec:authorize>
+						<button data-oper='list' class="btn btn-info">List</button>
 				</form>
 			</div>
 		</div>
@@ -262,8 +264,9 @@ $(document).ready(function() {
 	return true;
 	}
 	
-/* 	var csrfHeaderName ="${_csrf.headerName}"; 
-	var csrfTokenValue="${_csrf.token}"; */
+ 	var csrfHeaderName ="${_csrf.headerName}"; 
+	var csrfTokenValue="${_csrf.token}"; 
+	
 	$("input[type='file']").change(function(e){
 	
 	var formData = new FormData();
@@ -283,9 +286,9 @@ $(document).ready(function() {
 		processData: false, 
 		contentType: false,data: 
 		formData,type: 'POST',
-		/* beforeSend: function(xhr) {
+		beforeSend: function(xhr) {
 		    xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
-		}, */
+		}, 
 		dataType:'json',
 		success: function(result){
 		console.log(result); 

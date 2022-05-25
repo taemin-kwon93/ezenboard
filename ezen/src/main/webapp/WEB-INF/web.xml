@@ -26,6 +26,7 @@
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		
 		<!-- 이미지 파일 설정 추가 -->
 		<multipart-config>
 			<location>C:\\upload\\temp</location>
@@ -64,4 +65,6 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	
 </web-app>

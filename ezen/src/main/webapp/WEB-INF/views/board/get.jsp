@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -71,9 +72,7 @@
 						<label>Bno</label> <input class="form-control" name='bno'
 							value='<c:out value="${board.bno }"/>' readonly="readonly">
 					</div>
-	
-					<%-- <input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" /> --%>
+						
 					<div class="form-group">
 						<label>Title</label> <input class="form-control" name='title'
 							value='<c:out value="${board.title }"/>' readonly="readonly">
@@ -86,16 +85,16 @@
 					</div>
 					
 					<div class="form-group">
-					  <label>Writer</label> <input class="form-control" name='writer'
-					  	value='<c:out value="${board.writer }"/>' readonly="readonly">
-					</div>	
+					<label>Writer</label> <input class="form-control" name='writer' 
+						value='<c:out value="${board.writer }"/>' readonly="readonly">
+					</div>
 					
-					<%-- <div class="form-group">
-						<label>Writer</label> <input class="form-control" name='writer'
-							value='<sec:authentication property="principal.username"/>'
-							readonly="readonly">
-					</div> --%>
+					<sec:authentication property="principal" var="pinfo"/>
+					<sec:authorize access="isAuthenticated()">
+					<c:if test="${pinfo.username eq board.writer}">
 					<button data-oper='modify' class="btn btn-default">Modify</button>
+					</c:if>
+					</sec:authorize>
 					<button data-oper='list' class="btn btn-info">List</button>
 					
 					<!-- 조회 페이지에서 form 처리 -->
@@ -139,7 +138,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<i class="fa fa-comments fa-fw"></i> Reply
+				<sec:authorize access="isAuthenticated()">
 				<button id='addReplyBtn' class='btn btn-primary btn-xs pull-right'>New Reply</button>
+				</sec:authorize>
 			</div>
 			
 			<div class="panel-body">
@@ -253,7 +254,6 @@ $(document).ready(function() {
 		}, 1000);
 	});
 
-	
 	var operForm = $("#operForm");
 	$("button[data-oper='modify']").on("click", function(e) {
 		operForm.attr("action", "/board/modify").submit();
@@ -382,6 +382,15 @@ $(document).ready(function() {
 	var modalRemoveBtn = $("#modalRemoveBtn");
 	var modalRegisterBtn = $("#modalRegisterBtn");
 	
+	var replyer = null;
+	
+	<sec:authorize access="isAuthenticated()">
+		replyer = '<sec:authentication property="principal.username"/>';   
+	</sec:authorize>
+	
+	var csrfHeaderName ="${_csrf.headerName}"; 
+	var csrfTokenValue="${_csrf.token}";
+	
 	$("#modalCloseBtn").on("click", function(e){
 		modal.modal('hide');
 	});
@@ -389,6 +398,7 @@ $(document).ready(function() {
 	//댓글 등록 버튼
 	$("#addReplyBtn").on("click", function(e){
 		modal.find("input").val("");
+		modal.find("input[name='replyer']").val(replyer);
 		modalInputReplyDate.closest("div").hide();
 		modal.find("button[id !='modalCloseBtn']").hide();
 		
@@ -397,6 +407,10 @@ $(document).ready(function() {
 		$(".modal").modal("show");
 	
 	});
+
+	$(document).ajaxSend(function(e, xhr, options) { 
+		xhr.setRequestHeader(csrfHeaderName, csrfTokenValue); 
+	}); 
 	
 	//새로운 댓글을 등록하는 함수.
 	modalRegisterBtn.on("click", function(e) {
@@ -411,7 +425,7 @@ $(document).ready(function() {
 			
 			modal.find("input").val("");
 			modal.modal("hide");
-		    showList(-1); 
+		    showList(-1);
 		});
 		
 	});
@@ -440,18 +454,32 @@ $(document).ready(function() {
 		  
 	//댓글 수정
 	modalModBtn.on("click", function(e){
+	
+	var originalReplyer = modalInputReplyer.val();
 	var reply = {
 				rno : modal.data("rno"), 
-				reply : modalInputReply.val()
+				reply : modalInputReply.val(),
+				replyer: originalReplyer
 			};
-			
-			replyService.update(reply, function(result){
-			      
-				alert(result);
-				modal.modal("hide");
-				showList(pageNum);
-			
-			});
+	
+		if(!replyer) {
+			alert("로그인후 수정이 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		if(replyer  != originalReplyer){
+			alert("자신이 작성한 댓글만 수정이 가능합니다.");
+			modal.modal("hide");
+			return;
+		
+		}
+		replyService.update(reply, function(result){
+			alert(result);
+			modal.modal("hide");
+			showList(pageNum);
+		
+		});
 		  
 		});
 	

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +31,8 @@ public class ReplyController {
 	@Setter(onMethod_ = @Autowired)	
 	private ReplyService service;
 	
-	@PostMapping(value = "/new", 
-			consumes = "application/json",
-			produces = {MediaType.TEXT_PLAIN_VALUE})
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping(value = "/new", consumes = "application/json", produces = { MediaType.TEXT_PLAIN_VALUE })
 	public ResponseEntity<String> create(@RequestBody ReplyVO vo) {
 		
 		log.info("create(@RequestBody ReplyVO vo)" + vo);
@@ -62,8 +62,8 @@ public class ReplyController {
 		return new ResponseEntity<>(service.get(rno), HttpStatus.OK);
 	}
 	
-	@DeleteMapping(value = "/{rno}",
-			produces = {MediaType.TEXT_PLAIN_VALUE})
+	@PreAuthorize("principal.username == #vo.replyer")
+	@DeleteMapping(value = "/{rno}")
 	public ResponseEntity<String> remove(@PathVariable("rno") Long rno) {
 		
 		return service.remove(rno) == 1 ?
@@ -71,10 +71,10 @@ public class ReplyController {
 			:	new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
+	@PreAuthorize("principal.username == #vo.replyer")
 	@RequestMapping(value = "/{rno}",
 			method = {RequestMethod.PUT, RequestMethod.PATCH},
-			consumes = "application/json",
-			produces = {MediaType.TEXT_PLAIN_VALUE})
+			consumes = "application/json")
 	public ResponseEntity<String> modify(
 			@PathVariable("rno") Long rno,
 			@RequestBody ReplyVO vo) {

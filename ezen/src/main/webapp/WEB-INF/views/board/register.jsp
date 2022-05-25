@@ -64,8 +64,9 @@
 			<div class="panel-body">
 
 				<form role="form" action="/board/register" method="post">
-					<%-- <input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" /> --%>
+				
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						
 					<div class="form-group">
 						<label>Title</label> <input class="form-control" name='title'>
 					</div>
@@ -76,13 +77,10 @@
 					</div>
 					
 					<div class="form-group">
-					  <label>Writer</label> <input class="form-control" name='writer'>
-					</div>	
-					<%-- <div class="form-group">
 						<label>Writer</label> <input class="form-control" name='writer'
 							value='<sec:authentication property="principal.username"/>'
 							readonly="readonly">
-					</div> --%>
+					</div>
 
 					<button type="submit" class="btn btn-default">Submit Button</button>
 					<button type="reset" class="btn btn-default">Reset Button</button>
@@ -154,7 +152,10 @@ $(document).ready(function(){
 		}
 		return true;
 	}
-
+	
+	var csrfHeaderName ="${_csrf.headerName}"; 
+	var csrfTokenValue="${_csrf.token}";
+	
 	$("input[type='file']").change(function(e) {
 		var formData = new FormData();
 		var inputFile = $("input[name='uploadFile']");
@@ -173,11 +174,11 @@ $(document).ready(function(){
 			url : '/uploadAjaxAction',
 			processData : false,
 			contentType : false,
-			/* beforeSend : function(xhr) {
+			beforeSend : function(xhr) {
 				xhr.setRequestHeader(
 						csrfHeaderName,
 						csrfTokenValue);
-			}, */
+			},
 			data : formData,
 			type : 'POST',
 			dataType : 'json',
@@ -195,7 +196,7 @@ $(document).ready(function(){
 	var uploadUL = $(".uploadResult ul");
 	var str = "";
 
-	$(uploadResultArr) .each( function(i, obj) {
+	$(uploadResultArr).each( function(i, obj) {
 		if(obj.image){
 			var fileCallPath =  encodeURIComponent( obj.uploadPath+ "/s_"+obj.uuid +"_"+obj.fileName);
 			str += "<li data-path='"+obj.uploadPath+"'";
@@ -239,11 +240,11 @@ $(document).ready(function(){
 				fileName : targetFile,
 				type : type
 			},
-			/* beforeSend : function(xhr) {
+			beforeSend : function(xhr) {
 				xhr.setRequestHeader(
 						csrfHeaderName,
 						csrfTokenValue);
-			}, */
+			},
 			dataType : 'text',
 			type : 'POST',
 			success : function(result) {

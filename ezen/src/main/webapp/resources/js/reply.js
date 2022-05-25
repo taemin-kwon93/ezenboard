@@ -14,14 +14,14 @@ var replyService = (function() {
 				if (callback) {
 					callback(result);
 				}
-			}, //success
+			},
 			error : function(xhr, status, er) {
 				if (error) {
 					error(er);
 				}
-			} //error
-		}) //ajax
-	} //function add
+			} 
+		}) 
+	} 
 	
 	function getList(param, callback, error) {
 	

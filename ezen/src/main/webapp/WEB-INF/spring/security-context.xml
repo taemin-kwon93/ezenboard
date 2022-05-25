@@ -2,8 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
@@ -14,7 +18,7 @@
 	<bean id="customUserDetailsService" 
 		class="org.ezenboard.security.CustomUserDetailsService" />
 	
-	<bean id="customLoginSuccess" class="org.ezenboard.security.CustomLoginSuccessHandler" />
+	<!-- <bean id="customLoginSuccess" class="org.ezenboard.security.CustomLoginSuccessHandler" /> -->
 	
 	<security:http>
 
@@ -27,7 +31,8 @@
 		<security:intercept-url pattern="/sample/admin" 
 			access="hasRole('ROLE_ADMIN')" />
 			
-		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess" /> 
+		<!-- <security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess" />  -->
+		<security:form-login login-page="/customLogin" />
 		
 		<security:access-denied-handler	ref="customAccessDenied" />
 
