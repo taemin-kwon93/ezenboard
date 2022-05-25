@@ -89,7 +89,6 @@ public class BoardController {
 		return "redirect:/board/list" + cri.getListLink();
 	}
 	
-	@PreAuthorize("principal.username == #writer")
 	@PostMapping("/remove")
 	public String remove(@RequestParam("bno") Long bno, 
 			RedirectAttributes rttr, 

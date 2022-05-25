@@ -398,7 +398,6 @@ $(document).ready(function() {
 	//댓글 등록 버튼
 	$("#addReplyBtn").on("click", function(e){
 		modal.find("input").val("");
-		modal.find("input[name='replyer']").val(replyer);
 		modalInputReplyDate.closest("div").hide();
 		modal.find("button[id !='modalCloseBtn']").hide();
 		
@@ -425,7 +424,7 @@ $(document).ready(function() {
 			
 			modal.find("input").val("");
 			modal.modal("hide");
-		    showList(-1);
+		    showList(-1); 
 		});
 		
 	});

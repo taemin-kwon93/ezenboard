@@ -32,7 +32,9 @@ public class ReplyController {
 	private ReplyService service;
 	
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping(value = "/new", consumes = "application/json", produces = { MediaType.TEXT_PLAIN_VALUE })
+	@PostMapping(value = "/new", 
+			consumes = "application/json",
+			produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> create(@RequestBody ReplyVO vo) {
 		
 		log.info("create(@RequestBody ReplyVO vo)" + vo);
@@ -63,7 +65,8 @@ public class ReplyController {
 	}
 	
 	@PreAuthorize("principal.username == #vo.replyer")
-	@DeleteMapping(value = "/{rno}")
+	@DeleteMapping(value = "/{rno}",
+			produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> remove(@PathVariable("rno") Long rno) {
 		
 		return service.remove(rno) == 1 ?
