@@ -48,11 +48,17 @@ var replyService = (function() {
 		});
 	}
 
-	function remove(rno, callback, error) {
+	function remove(rno, replyer, callback, error) {
+	console.log("--------------------------------------");  
+	console.log(JSON.stringify({rno:rno, replyer:replyer}));  
+		    
 		$.ajax({
 			type : 'delete',
-			url : '/replies/'+rno,
+			url : '/replies/' + rno,
+			data:  JSON.stringify({rno:rno, replyer:replyer}),
+			contentType: "application/json; charset=utf-8",
 			success : function(deleteResult, status, xhr) {
+			
 				if (callback) {
 					callback(deleteResult);
 				}
@@ -63,8 +69,8 @@ var replyService = (function() {
 				}
 			}
 		});
-		}
-		
+	}
+	
 	function update(reply, callback, error) {
 
 		console.log("RNO: " + reply.rno);
@@ -91,11 +97,9 @@ var replyService = (function() {
 
 		$.get("/replies/" + rno + ".json", 
 		function(result) {
-
 			if (callback) {
 				callback(result);
 			}
-
 		}).fail(function(xhr, status, err) {
 			if (error) {
 				error();
@@ -106,9 +110,7 @@ var replyService = (function() {
 	function displayTime(timeValue) {
 
 		var today = new Date();
-
 		var gap = today.getTime() - timeValue;
-
 		var dateObj = new Date(timeValue);
 		var str = "";
 

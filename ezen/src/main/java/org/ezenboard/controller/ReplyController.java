@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j;
 
 @RestController
 @Log4j
-@RequestMapping("/replies/*")	
+@RequestMapping("/replies/")	
 @AllArgsConstructor
 public class ReplyController {
 	
@@ -65,13 +65,16 @@ public class ReplyController {
 	}
 	
 	@PreAuthorize("principal.username == #vo.replyer")
-	@DeleteMapping(value = "/{rno}",
-			produces = {MediaType.TEXT_PLAIN_VALUE})
-	public ResponseEntity<String> remove(@PathVariable("rno") Long rno) {
-		
-		return service.remove(rno) == 1 ?
-				new ResponseEntity<>("success", HttpStatus.OK)
-			:	new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	@DeleteMapping("/{rno}")
+	public ResponseEntity<String> remove(
+			@RequestBody ReplyVO vo,
+			@PathVariable("rno") Long rno) {
+		log.info("remove _ rno: " + rno);
+		log.info("remove _ replyer: " + vo.getReplyer());
+
+		return service.remove(rno) == 1 ? new ResponseEntity<>("success", HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
 	}
 	
 	@PreAuthorize("principal.username == #vo.replyer")
