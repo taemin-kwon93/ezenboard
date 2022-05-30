@@ -13,8 +13,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
-
+    <title>EZEN Board</title>
+	
     <!-- Bootstrap Core CSS -->
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -68,7 +68,7 @@
                         <li>
                             <a href="#">
                                 <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <i class="fa fa-calendar fa-fw"></i> New Comment
                                     <span class="pull-right text-muted small">4 minutes ago</span>
                                 </div>
                             </a>
@@ -125,11 +125,10 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
 <ul class="dropdown-menu dropdown-user">
-    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-    </li>
-    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-    </li>
+    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a> </li>
+    <!-- <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a> </li> -->
 
+   
     
     <li class="divider"></li>
 		<sec:authorize access="isAuthenticated()">
@@ -165,7 +164,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="http://localhost/board/list"><i class="fa fa-dashboard fa-fw"></i> Board </a>
+                            <a href="/board/list"><i class="fa fa-edit fa-fw"></i> 전체 게시판 </a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
@@ -183,7 +182,7 @@
                             <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
                         </li>
                         <li>
-                            <a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
+                            <a href="forms.html"><i class="bi bi-table"></i> 테스트 </a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
@@ -210,7 +209,7 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> 관리자 페이지 <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="#">Second Level Item</a>
@@ -235,18 +234,6 @@
                                         </li>
                                     </ul>
                                     <!-- /.nav-third-level -->
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="blank.html">Blank Page</a>
-                                </li>
-                                <li>
-                                    <a href="login.html">Login Page</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
