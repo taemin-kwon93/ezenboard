@@ -1,14 +1,9 @@
 package org.ezenboard.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import org.ezenboard.domain.MemberVO;
 import org.ezenboard.service.MemberService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,11 +22,12 @@ public class MemberController {
 	public void joinForm() {
 		
 	}
-
-	@PostMapping("/member/join")
-	public String save(@ModelAttribute("user") MemberVO user, Model m) {
+	
+	@PostMapping("/join")
+	public String save(MemberVO user) {
 
 		log.info("MemberController _ join");
+		log.info("user.toString() : " + user.toString());
 		
 		return "redirect:/customLogin";
 	}
