@@ -20,7 +20,7 @@
 
 		<security:form-login login-page="/customLogin" />
 		
-		<security:access-denied-handler	ref="customAccessDenied" />
+		<security:access-denied-handler	ref="customAccessDenied" /> 
 
 		<security:logout logout-url="/customLogout"
 			invalidate-session="true" />
